@@ -1,6 +1,8 @@
-from sklearn.ensemble import RandomForestClassifier
+from sklearn.ensemble import RandomForestRegressor
 from matplotlib import pyplot as plt
 from time import time
+
+from sklearn.metrics import mean_squared_error, r2_score
 
 
 class RandomForest:
@@ -15,13 +17,8 @@ class RandomForest:
         # Training Data
         xs_train, ys_train = self.train_data
 
-        xs_train = xs_train.reshape(len(xs_train), 28 * 28)
-
-        # normalize pixel values
-        xs_train = xs_train / 255
-
         # Modeling
-        self.model = RandomForestClassifier(n_estimators=self.n_estimators)
+        self.model = RandomForestRegressor(n_estimators=self.n_estimators)
         start_training = time()
         self.model.fit(xs_train, ys_train)
         end_training = time()
@@ -31,13 +28,14 @@ class RandomForest:
         duration_training = round(duration_training, 2)
 
         # Prediction for Training mse
-        error = self.model.score(xs_train, ys_train)
+        y_pred = self.model.predict(xs_train)
+        error = r2_score(ys_train, y_pred)
         error = round(error, 2)
 
         # Summary
         print('------ Random Forest ------')
         print(f'Duration Training: {duration_training} seconds')
-        print('Accuracy Training: ', error)
+        print('R2 Score Training: ', error)
 
         return duration_training, error
 
@@ -45,14 +43,10 @@ class RandomForest:
         # Test Data
         xs_test, ys_test = self.test_data
 
-        # normalize pixel values
-        xs_test = xs_test / 255
-
-        xs_test = xs_test.reshape(len(xs_test), 28 * 28)
-
         # Predict Data
         start_test = time()
-        error = self.model.score(xs_test, ys_test)
+        y_pred = self.model.predict(xs_test)
+        error = r2_score(ys_test, y_pred)
         error = round(error, 2)
         end_test = time()
 
@@ -62,7 +56,7 @@ class RandomForest:
 
         print(f'Duration Inference: {duration_test} seconds')
 
-        print("Accuracy Testing: %.2f" % error)
+        print("R2 Score Testing: %.2f" % error)
         print("")
 
         return duration_test, error

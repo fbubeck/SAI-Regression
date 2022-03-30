@@ -1,13 +1,13 @@
 import numpy as np
 import tensorflow as tf
-from sklearn.model_selection import train_test_split
-from keras.layers import Dense, Flatten, MaxPool2D, Conv2D, Dropout
+from keras.layers import Dense
 from keras.models import Sequential
 from matplotlib import pyplot as plt
 from time import time
-from keras.utils.np_utils import to_categorical
+from sklearn.metrics import mean_squared_error, r2_score
 
-class TensorFlow_CNN:
+
+class TensorFlow_ANN:
     def __init__(self, train_data, test_data, learning_rate, n_epochs, id, opt):
         self.history = None
         self.train_data = train_data
@@ -22,41 +22,22 @@ class TensorFlow_CNN:
         # Training Data
         xs_train, ys_train = self.train_data
 
-        # Convert y_train into one-hot format
-        temp = []
-        for i in range(len(ys_train)):
-            temp.append(to_categorical(ys_train[i], num_classes=10))
-        ys_train = np.array(temp)
-
-        xs_train, xs_val, ys_train, ys_val = train_test_split(xs_train, ys_train, test_size=0.25, random_state=8)
-
-        # normalize pixel values
-        xs_train = xs_train / 255
-        xs_val = xs_val / 255
-
-        print(xs_train.shape)
-
         # define model architecture
         self.model = Sequential()
-        self.model.add(Conv2D(32, (3, 3), activation='relu', input_shape=(28, 28, 1)))
-        self.model.add(MaxPool2D((2, 2)))
-        self.model.add(Flatten())
-        self.model.add(Dense(100, activation='relu'))
-        self.model.add(Dropout(0.5))
-        self.model.add(Dense(10, activation='softmax'))
+        self.model.add(Dense(1))
 
         # Define Optimizer
         if self.opt == "SGD":
-            opt = tf.keras.optimizers.SGD(lr=self.learning_rate)
+            opt = tf.keras.optimizers.SGD(learning_rate=self.learning_rate)
         else:
-            opt = tf.keras.optimizers.Adam(lr=self.learning_rate)
+            opt = tf.keras.optimizers.Adam(learning_rate=self.learning_rate)
 
         # define loss and optimizer
-        self.model.compile(optimizer=opt, loss='categorical_crossentropy', metrics=['accuracy'])
+        self.model.compile(optimizer=opt, loss='mean_squared_error')
 
         # Modeling
         start_training = time()
-        self.history = self.model.fit(xs_train, ys_train, epochs=self.n_epochs, validation_data=(xs_val, ys_val),
+        self.history = self.model.fit(xs_train, ys_train, epochs=self.n_epochs, validation_split=0.33,
                                       batch_size=128, verbose=1)
         end_training = time()
 
@@ -70,13 +51,14 @@ class TensorFlow_CNN:
         n_params = trainableParams + nonTrainableParams
 
         # Prediction for Training mse
-        loss, error = self.model.evaluate(xs_train, ys_train, verbose=0)
+        y_pred = self.model.predict(xs_train)
+        error = r2_score(ys_train, y_pred)
         error = round(error, 2)
 
         # Summary
-        print('------ TensorFlow - CNN ------')
+        print('------ TensorFlow - ANN ------')
         print(f'Duration Training: {duration_training} seconds')
-        print('Accuracy Training: ', error)
+        print('R2 Score Training: ', error)
         print("Number of Parameter: ", n_params)
 
         return duration_training, error
@@ -85,18 +67,10 @@ class TensorFlow_CNN:
         # Test Data
         xs_test, ys_test = self.test_data
 
-        # normalize pixel values
-        xs_test = xs_test / 255
-
-        # Convert y_test into one-hot format
-        temp = []
-        for i in range(len(ys_test)):
-            temp.append(to_categorical(ys_test[i], num_classes=10))
-        ys_test = np.array(temp)
-
         # Predict Data
         start_test = time()
-        loss, error = self.model.evaluate(xs_test, ys_test, verbose=0)
+        y_pred = self.model.predict(xs_test)
+        error = r2_score(ys_test, y_pred)
         error = round(error, 2)
         end_test = time()
 
@@ -106,7 +80,7 @@ class TensorFlow_CNN:
 
         print(f'Duration Inference: {duration_test} seconds')
 
-        print("Accuracy Testing: %.2f" % error)
+        print("R2 Score Testing: %.2f" % error)
         print("")
 
         return duration_test, error

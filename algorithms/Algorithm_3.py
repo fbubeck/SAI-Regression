@@ -1,42 +1,28 @@
-import numpy as np
-from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import mean_squared_error
-from sklearn.model_selection import train_test_split
-from keras.utils.np_utils import to_categorical
+from sklearn.linear_model import LinearRegression
 from matplotlib import pyplot as plt
 from time import time
 
+from sklearn.metrics import mean_squared_error, r2_score
+from sklearn.preprocessing import PolynomialFeatures
 
-class LogisticRegressionClassifier:
-    def __init__(self, train_data, test_data, penalty, solver, id, max_iter):
+
+class Linear_Regression:
+    def __init__(self, train_data, test_data, degree, id):
         self.history = None
         self.train_data = train_data
         self.test_data = test_data
-        self.penalty = penalty
-        self.solver = solver
+        self.degree = degree
         self.id = id
-        self.max_iter = max_iter
         self.model = None
+        self.poly = None
 
     def train(self):
         # Training Data
         xs_train, ys_train = self.train_data
 
-        xs_train = xs_train.reshape(len(xs_train), 28 * 28)
-
-        # normalize pixel values
-        xs_train = xs_train / 255
-
         # Modeling
-        self.model = LogisticRegression(fit_intercept=True,
-                                        multi_class='auto',
-                                        penalty=self.penalty,
-                                        solver=self.solver,
-                                        max_iter=self.max_iter,
-                                        C=1,
-                                        tol=0.01,
-                                        verbose=1)
         start_training = time()
+        self.model = LinearRegression()
         self.model.fit(xs_train, ys_train)
         end_training = time()
 
@@ -45,13 +31,14 @@ class LogisticRegressionClassifier:
         duration_training = round(duration_training, 2)
 
         # Prediction for Training mse
-        error = self.model.score(xs_train, ys_train)
+        y_pred = self.model.predict(xs_train)
+        error = r2_score(ys_train, y_pred)
         error = round(error, 2)
 
         # Summary
-        print('------ Logistic Regression ------')
+        print('------ Linear Regression ------')
         print(f'Duration Training: {duration_training} seconds')
-        print('Accuracy Training: ', error)
+        print('R2 Score Training: ', error)
 
         return duration_training, error
 
@@ -59,14 +46,10 @@ class LogisticRegressionClassifier:
         # Test Data
         xs_test, ys_test = self.test_data
 
-        # normalize pixel values
-        xs_test = xs_test / 255
-
-        xs_test = xs_test.reshape(len(xs_test), 28 * 28)
-
         # Predict Data
         start_test = time()
-        error = self.model.score(xs_test, ys_test)
+        y_pred = self.model.predict(xs_test)
+        error = r2_score(ys_test, y_pred)
         error = round(error, 2)
         end_test = time()
 
@@ -76,7 +59,7 @@ class LogisticRegressionClassifier:
 
         print(f'Duration Inference: {duration_test} seconds')
 
-        print("Accuracy Testing: %.2f" % error)
+        print("R2 Score Testing: %.2f" % error)
         print("")
 
         return duration_test, error
