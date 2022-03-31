@@ -34,10 +34,6 @@ def main():
     algo2_c_id = config["Algorithm 2 - Run C"]["id"]
     algo3_a_degree = config["Algorithm 3 - Run A"]["degree"]
     algo3_a_id = config["Algorithm 3 - Run A"]["id"]
-    algo3_b_degree = config["Algorithm 3 - Run B"]["degree"]
-    algo3_b_id = config["Algorithm 3 - Run B"]["id"]
-    algo3_c_degree = config["Algorithm 3 - Run C"]["degree"]
-    algo3_c_id = config["Algorithm 3 - Run C"]["id"]
     algo4_a_n_estimators = config["Algorithm 4 - Run A"]["n_estimators"]
     algo4_b_n_estimators = config["Algorithm 4 - Run B"]["n_estimators"]
     algo4_c_n_estimators = config["Algorithm 4 - Run C"]["n_estimators"]
@@ -173,7 +169,7 @@ def main():
     ax2.plot(data_inference4["duration"], data_inference4["error"], '-o', c='orange', alpha=0.6)
     ax1.title.set_text('Training')
     ax2.title.set_text('Inference')
-    plt.legend(["TensorFlow ANN ", "Decision Tree", "Linear Regression", "Random Forest"], fontsize=9,
+    plt.legend(["ANN ", "Decision Tree", "Linear Regression", "Random Forest"], fontsize=9,
                loc='lower right',
                ncol=1, bbox_transform=fig.transFigure)
     # ax1.set_yscale('log')
