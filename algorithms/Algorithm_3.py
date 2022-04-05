@@ -1,18 +1,19 @@
-from sklearn.linear_model import LinearRegression
+from sklearn.linear_model import LinearRegression, SGDRegressor, Ridge
 from matplotlib import pyplot as plt
 from time import time
 
 from sklearn.metrics import mean_squared_error, r2_score
-from sklearn.preprocessing import PolynomialFeatures
+from sklearn.pipeline import make_pipeline
+from sklearn.preprocessing import PolynomialFeatures, StandardScaler
+from sklearn.svm import SVR
 
 
 class Linear_Regression:
-    def __init__(self, train_data, test_data, degree, id):
+    def __init__(self, train_data, test_data,  i):
         self.history = None
         self.train_data = train_data
         self.test_data = test_data
-        self.degree = degree
-        self.id = id
+        self.i = i
         self.model = None
         self.poly = None
 
@@ -22,21 +23,23 @@ class Linear_Regression:
 
         # Modeling
         start_training = time()
-        self.model = LinearRegression()
+        self.model = make_pipeline(StandardScaler(), SVR(max_iter=self.i))
         self.model.fit(xs_train, ys_train)
         end_training = time()
 
         # Time
         duration_training = end_training - start_training
-        duration_training = round(duration_training, 2)
+        duration_training = round(duration_training, 4)
 
         # Prediction for Training mse
         y_pred = self.model.predict(xs_train)
         error = r2_score(ys_train, y_pred)
-        error = round(error, 2)
+        error *= 100
+        error = round(error, 4)
 
         # Summary
-        print('------ Linear Regression ------')
+        print('------ Support Vector Regressor ------')
+        print('Number of Iterations: ', self.i)
         print(f'Duration Training: {duration_training} seconds')
         print('R2 Score Training: ', error)
 
@@ -50,12 +53,13 @@ class Linear_Regression:
         start_test = time()
         y_pred = self.model.predict(xs_test)
         error = r2_score(ys_test, y_pred)
-        error = round(error, 2)
+        error *= 100
+        error = round(error, 4)
         end_test = time()
 
         # Time
         duration_test = end_test - start_test
-        duration_test = round(duration_test, 2)
+        duration_test = round(duration_test, 4)
 
         print(f'Duration Inference: {duration_test} seconds')
 

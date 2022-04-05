@@ -1,53 +1,16 @@
 {
-    "Algorithm 1 - Run A":{
-        "learning_rate":0.01,
-        "n_epochs":5,
-        "opt": "SGD",
-        "id":1.1
-    },
-    "Algorithm 1 - Run B":{
+    "Algorithm 1":{
         "learning_rate":0.001,
         "n_epochs":10,
-        "opt": "SGD",
-        "id":1.2
+        "opt": "RMSprop"
     },
-    "Algorithm 1 - Run C":{
-        "learning_rate":0.01,
-        "n_epochs":30,
-        "opt": "Adam",
-        "id":1.3
+    "Algorithm 2":{
+
     },
-    "Algorithm 2 - Run A":{
-        "max_depth":12,
-        "id":2.1
+    "Algorithm 3":{
+
     },
-    "Algorithm 2 - Run B":{
-        "max_depth":15,
-        "id":2.2
-    },
-    "Algorithm 2 - Run C":{
-        "max_depth":13,
-        "id":2.3
-    },
-    "Algorithm 3 - Run A":{
-        "degree":"1",
-        "id":3.1
-    },
-    "Algorithm 3 - Run B":{
-        "degree":"3",
-        "id":3.2
-    },
-    "Algorithm 3 - Run C":{
-        "degree":"6",
-        "id":3.3
-    },
-    "Algorithm 4 - Run A":{
-        "n_estimators":10
-    },
-    "Algorithm 4 - Run B":{
-        "n_estimators":20
-    },
-    "Algorithm 4 - Run C":{
-        "n_estimators":25
+    "Algorithm 4":{
+
     }
 }

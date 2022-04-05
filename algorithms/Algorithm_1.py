@@ -1,6 +1,6 @@
 import numpy as np
 import tensorflow as tf
-from keras.layers import Dense
+from keras.layers import Dense, Flatten
 from keras.models import Sequential
 from matplotlib import pyplot as plt
 from time import time
@@ -8,13 +8,13 @@ from sklearn.metrics import mean_squared_error, r2_score
 
 
 class TensorFlow_ANN:
-    def __init__(self, train_data, test_data, learning_rate, n_epochs, id, opt):
+    def __init__(self, train_data, test_data, learning_rate, n_epochs, opt, i):
         self.history = None
         self.train_data = train_data
         self.test_data = test_data
         self.learning_rate = learning_rate
         self.n_epochs = n_epochs
-        self.id = id
+        self.i = i
         self.opt = opt
         self.model = 0
 
@@ -22,13 +22,19 @@ class TensorFlow_ANN:
         # Training Data
         xs_train, ys_train = self.train_data
 
+        n_inputs = xs_train.shape[1]
+        n_outputs = ys_train.shape[0]
+
         # define model architecture
         self.model = Sequential()
+        self.model.add(Dense(self.i, input_dim=n_inputs, activation='relu'))
         self.model.add(Dense(1))
 
         # Define Optimizer
         if self.opt == "SGD":
             opt = tf.keras.optimizers.SGD(learning_rate=self.learning_rate)
+        elif self.opt == "RMSprop":
+            opt = tf.keras.optimizers.RMSprop(self.learning_rate)
         else:
             opt = tf.keras.optimizers.Adam(learning_rate=self.learning_rate)
 
@@ -43,7 +49,7 @@ class TensorFlow_ANN:
 
         # Time
         duration_training = end_training - start_training
-        duration_training = round(duration_training, 2)
+        duration_training = round(duration_training, 4)
 
         # Number of Parameter
         trainableParams = np.sum([np.prod(v.get_shape()) for v in self.model.trainable_weights])
@@ -53,10 +59,12 @@ class TensorFlow_ANN:
         # Prediction for Training mse
         y_pred = self.model.predict(xs_train)
         error = r2_score(ys_train, y_pred)
-        error = round(error, 2)
+        error *= 100
+        error = round(error, 4)
 
         # Summary
         print('------ TensorFlow - ANN ------')
+        print('Number of Neurons: ', self.i)
         print(f'Duration Training: {duration_training} seconds')
         print('R2 Score Training: ', error)
         print("Number of Parameter: ", n_params)
@@ -71,12 +79,13 @@ class TensorFlow_ANN:
         start_test = time()
         y_pred = self.model.predict(xs_test)
         error = r2_score(ys_test, y_pred)
-        error = round(error, 2)
+        error *= 100
+        error = round(error, 4)
         end_test = time()
 
         # Time
         duration_test = end_test - start_test
-        duration_test = round(duration_test, 2)
+        duration_test = round(duration_test, 4)
 
         print(f'Duration Inference: {duration_test} seconds')
 

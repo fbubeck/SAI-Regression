@@ -6,12 +6,11 @@ from time import time
 
 
 class DecisionTree:
-    def __init__(self, train_data, test_data, max_depth, id):
+    def __init__(self, train_data, test_data, max_depth):
         self.history = None
         self.train_data = train_data
         self.test_data = test_data
         self.max_depth = max_depth
-        self.id = id
         self.model = 0
 
     def train(self):
@@ -27,15 +26,17 @@ class DecisionTree:
 
         # Time
         duration_training = end_training - start_training
-        duration_training = round(duration_training, 2)
+        duration_training = round(duration_training, 4)
 
         # Prediction for Training mse
         y_pred = self.model.predict(xs_train)
         error = r2_score(ys_train, y_pred)
-        error = round(error, 2)
+        error *= 100
+        error = round(error, 4)
 
         # Summary
         print('------ Decision Tree ------')
+        print('Number of Splits: ', self.max_depth)
         print(f'Duration Training: {duration_training} seconds')
         print('R2 Score Training: ', error)
 
@@ -49,12 +50,13 @@ class DecisionTree:
         start_test = time()
         y_pred = self.model.predict(xs_test)
         error = r2_score(ys_test, y_pred)
-        error = round(error, 2)
+        error *= 100
+        error = round(error, 4)
         end_test = time()
 
         # Time
         duration_test = end_test - start_test
-        duration_test = round(duration_test, 2)
+        duration_test = round(duration_test, 4)
 
         print(f'Duration Inference: {duration_test} seconds')
 
