@@ -4,7 +4,7 @@
         "n_epochs":10,
         "opt": "RMSprop",
         "min": 3,
-        "max": 60,
+        "max": 80,
         "step": 3
     },
     "Algorithm 2":{
@@ -14,7 +14,7 @@
     },
     "Algorithm 3":{
         "min": 400,
-        "max": 1900,
+        "max": 2100,
         "step": 50
     },
     "Algorithm 4":{
