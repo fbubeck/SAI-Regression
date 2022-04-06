@@ -88,7 +88,7 @@ def main():
     SVM_training = []
     SVM_Regression_test = []
 
-    for i in range(600, 1300, 50):
+    for i in range(400, 1500, 50):
         model = Algorithm_3.Linear_Regression(train_data, test_data, i)
         duration_train, acc_train = model.train()
         duration_test, acc_test = model.test()
