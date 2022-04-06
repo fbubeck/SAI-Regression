@@ -17,7 +17,7 @@ class DecisionTree:
         # Training Data
         xs_train, ys_train = self.train_data
 
-        self.model = DecisionTreeRegressor(max_depth=self.max_depth, n_jobs=1)
+        self.model = DecisionTreeRegressor(max_depth=self.max_depth)
 
         # Modeling
         start_training = time()
