@@ -60,7 +60,7 @@ def main():
     DecisionTree_training = []
     DecisionTree_test = []
 
-    for i in range(2, 40, 1):
+    for i in range(2, 45, 1):
         model = Algorithm_2.DecisionTree(train_data, test_data, i)
         duration_train, acc_train= model.train()
         duration_test, acc_test = model.test()
@@ -88,7 +88,7 @@ def main():
     SVM_training = []
     SVM_Regression_test = []
 
-    for i in range(400, 1600, 50):
+    for i in range(400, 1700, 50):
         model = Algorithm_3.Linear_Regression(train_data, test_data, i)
         duration_train, acc_train = model.train()
         duration_test, acc_test = model.test()
