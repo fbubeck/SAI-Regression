@@ -88,7 +88,7 @@ def main():
     SVM_training = []
     SVM_Regression_test = []
 
-    for i in range(400, 1500, 50):
+    for i in range(400, 1600, 50):
         model = Algorithm_3.Linear_Regression(train_data, test_data, i)
         duration_train, acc_train = model.train()
         duration_test, acc_test = model.test()
@@ -116,7 +116,7 @@ def main():
     RandomForest_training = []
     RandomForest_test = []
 
-    for i in range(1, 30, 1):
+    for i in range(1, 40, 1):
         model = Algorithm_4.RandomForest(train_data, test_data, i)
         duration_train, acc_train = model.train()
         duration_test, acc_test = model.test()
