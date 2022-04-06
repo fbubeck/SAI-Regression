@@ -32,7 +32,7 @@ def main():
     NeuralNetwork_training = []
     NeuralNetwork_test = []
 
-    for i in range(3, 30, 2):
+    for i in range(3, 30, 1):
         model = Algorithm_1.TensorFlow_ANN(train_data, test_data, algo1_lr, algo1_epochs, algo1_opt, i)
         duration_train, acc_train = model.train()
         duration_test, acc_test = model.test()
@@ -60,7 +60,7 @@ def main():
     DecisionTree_training = []
     DecisionTree_test = []
 
-    for i in range(2, 120, 6):
+    for i in range(2, 40, 1):
         model = Algorithm_2.DecisionTree(train_data, test_data, i)
         duration_train, acc_train= model.train()
         duration_test, acc_test = model.test()
@@ -116,7 +116,7 @@ def main():
     RandomForest_training = []
     RandomForest_test = []
 
-    for i in range(1, 25, 1):
+    for i in range(1, 30, 1):
         model = Algorithm_4.RandomForest(train_data, test_data, i)
         duration_train, acc_train = model.train()
         duration_test, acc_test = model.test()
