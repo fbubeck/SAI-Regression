@@ -23,7 +23,7 @@ class Linear_Regression:
 
         # Modeling
         start_training = time()
-        self.model = make_pipeline(StandardScaler(), SVR(max_iter=self.i, n_jobs=1))
+        self.model = make_pipeline(StandardScaler(), SVR(max_iter=self.i))
         self.model.fit(xs_train, ys_train)
         end_training = time()
 

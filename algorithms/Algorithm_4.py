@@ -18,7 +18,7 @@ class RandomForest:
         xs_train, ys_train = self.train_data
 
         # Modeling
-        self.model = RandomForestRegressor(n_estimators=self.n_estimators, n_jobs=1)
+        self.model = RandomForestRegressor(n_estimators=self.n_estimators)
         start_training = time()
         self.model.fit(xs_train, ys_train)
         end_training = time()
