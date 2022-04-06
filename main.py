@@ -32,7 +32,7 @@ def main():
     NeuralNetwork_training = []
     NeuralNetwork_test = []
 
-    for i in range(3, 15, 1):
+    for i in range(3, 30, 2):
         model = Algorithm_1.TensorFlow_ANN(train_data, test_data, algo1_lr, algo1_epochs, algo1_opt, i)
         duration_train, acc_train = model.train()
         duration_test, acc_test = model.test()
